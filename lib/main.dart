@@ -2,28 +2,76 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:water_wells_web/data/water_well_data.dart';
+import 'package:water_wells_web/view_water_well/view_water_well_widget.dart';
 
-void main() {
+import 'flutter_flow/flutter_flow_theme.dart';
+import 'flutter_flow/internationalization.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await FlutterFlowTheme.initialize();
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+  static _MyAppState of(BuildContext context) =>
+      context.findAncestorStateOfType<_MyAppState>()!;
+}
+
+class _MyAppState extends State<MyApp> {
+  Locale? _locale;
+  ThemeMode _themeMode = FlutterFlowTheme.themeMode;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void setLocale(String language) {
+    setState(() => _locale = createLocale(language));
+  }
+
+  void setThemeMode(ThemeMode mode) => setState(() {
+        _themeMode = mode;
+        FlutterFlowTheme.saveThemeMode(mode);
+      });
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      localizationsDelegates: const [
+        FFLocalizationsDelegate(),
+        CountryLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      locale: _locale,
+      supportedLocales: const [
+        Locale('ar'),
+      ],
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      /*routes: {
+        'water-well-page': (context) => const ViewWaterWellWidget(),
+      },*/
     );
   }
 }
@@ -51,12 +99,15 @@ class _MyHomePageState extends State<MyHomePage> {
       information: 'test information\nmore test information',
       latitude: 31,
       longitude: 31,
-      thumbnailImage: CachedNetworkImage(
-        imageUrl: 'https://www.care.org.tr/files/2017/04/img_0225-jpg.jpg',
-        progressIndicatorBuilder: (context, url, downloadProgress) =>
-            CircularProgressIndicator(value: downloadProgress.progress),
-        errorWidget: (context, url, error) => const Icon(Icons.error),
-      ),
+      thumbnailImage: 'https://www.care.org.tr/files/2017/04/img_0225-jpg.jpg',
+      extraImages: [
+        'https://www.care.org.tr/files/2017/04/img_0225-jpg.jpg',
+        'https://www.care.org.tr/files/2017/04/img_0225-jpg.jpg',
+        'https://www.care.org.tr/files/2017/04/img_0225-jpg.jpg',
+        'https://www.care.org.tr/files/2017/04/img_0225-jpg.jpg',
+        'https://www.care.org.tr/files/2017/04/img_0225-jpg.jpg',
+      ],
+      video: 'https://www.youtube.com/watch?v=h1PAH0RRX1o',
     ),
   ];
   late ClusterManager _manager;
@@ -68,10 +119,19 @@ class _MyHomePageState extends State<MyHomePage> {
         name: 'Place $i',
         latitude: 48.848200 + i * 0.001,
         longitude: 2.319124 + i * 0.001,
-        thumbnailImage: CachedNetworkImage(
-          imageUrl: '',
-        ),
-        information: 'Place $i',
+        thumbnailImage:
+            'https://images.squarespace-cdn.com/content/v1/577d6ce41b631b591bf11b0c/1615934188360-VX3N91NWZQ89S6SX5BCB/bb.2018-02-17.01-47-08+copy+2.png',
+        information: 'Place $i\nTest Test Test',
+        extraImages: [
+          'https://images.squarespace-cdn.com/content/v1/577d6ce41b631b591bf11b0c/1615934188360-VX3N91NWZQ89S6SX5BCB/bb.2018-02-17.01-47-08+copy+2.png',
+          'https://images.squarespace-cdn.com/content/v1/577d6ce41b631b591bf11b0c/1615934188360-VX3N91NWZQ89S6SX5BCB/bb.2018-02-17.01-47-08+copy+2.png',
+          'https://images.squarespace-cdn.com/content/v1/577d6ce41b631b591bf11b0c/1615934188360-VX3N91NWZQ89S6SX5BCB/bb.2018-02-17.01-47-08+copy+2.png',
+          'https://images.squarespace-cdn.com/content/v1/577d6ce41b631b591bf11b0c/1615934188360-VX3N91NWZQ89S6SX5BCB/bb.2018-02-17.01-47-08+copy+2.png',
+          'https://images.squarespace-cdn.com/content/v1/577d6ce41b631b591bf11b0c/1615934188360-VX3N91NWZQ89S6SX5BCB/bb.2018-02-17.01-47-08+copy+2.png',
+          'https://images.squarespace-cdn.com/content/v1/577d6ce41b631b591bf11b0c/1615934188360-VX3N91NWZQ89S6SX5BCB/bb.2018-02-17.01-47-08+copy+2.png',
+          'https://images.squarespace-cdn.com/content/v1/577d6ce41b631b591bf11b0c/1615934188360-VX3N91NWZQ89S6SX5BCB/bb.2018-02-17.01-47-08+copy+2.png',
+        ],
+        video: 'https://www.youtube.com/watch?v=h1PAH0RRX1o',
       ),
   ];
   Future<void> setMarkers() async {
@@ -113,8 +173,23 @@ class _MyHomePageState extends State<MyHomePage> {
           infoWindow: !cluster.isMultiple
               ? InfoWindow(
                   title: cluster.items.first.name,
-                  snippet:
-                      '${cluster.items.first.information}\nTap here to view more information!',
+                  snippet: 'إضغط لإظهار معلوملت اكثر',
+                  onTap: () {
+                    print(cluster.items.first.toString());
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ViewWaterWellWidget(
+                          name: cluster.items.first.name,
+                          information: cluster.items.first.information,
+                          latitude: cluster.items.first.latitude,
+                          longitude: cluster.items.first.longitude,
+                          thumbnail: cluster.items.first.thumbnailImage,
+                          extraImages: cluster.items.first.extraImages,
+                          video: cluster.items.first.video,
+                        ),
+                      ),
+                    );
+                  },
                 )
               : const InfoWindow(),
           onTap: () async {
@@ -145,7 +220,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final PictureRecorder pictureRecorder = PictureRecorder();
     final Canvas canvas = Canvas(pictureRecorder);
-    final Paint paint1 = Paint()..color = Colors.orange;
+    final Paint paint1 = Paint()..color = Colors.blueAccent;
     final Paint paint2 = Paint()..color = Colors.white;
 
     canvas.drawCircle(Offset(size / 2, size / 2), size / 2.0, paint1);
@@ -219,6 +294,53 @@ class _MyHomePageState extends State<MyHomePage> {
                 _manager.setMapId(controller.mapId);
               },
             ),
+            Positioned(
+              bottom: MediaQuery.of(context).size.height / 5,
+              right: MediaQuery.of(context).size.width / 2 - 100,
+              child: Container(
+                width: 150,
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.black54,
+                ),
+                child: MaterialButton(
+                  onPressed: () {
+                    showCountryPicker(
+                      context: context,
+                      countryListTheme: CountryListThemeData(
+                        bottomSheetHeight:
+                            MediaQuery.of(context).size.height / 2,
+                      ),
+                      onSelect: (Country country) {
+                        print('Select country: ${country.countryCode}');
+                      },
+                    );
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Icon(
+                        Icons.search,
+                        color: Colors.white,
+                      ),
+                      Text(
+                        'بحث',
+                        style: FlutterFlowTheme.of(context).bodyText1.override(
+                              fontFamily: 'Poppins',
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )
           ],
         ));
   }

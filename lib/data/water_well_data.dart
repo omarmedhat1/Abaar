@@ -16,14 +16,15 @@ class WaterWellData with ClusterItem {
     required this.longitude,
     required this.thumbnailImage,
     this.extraImages,
+    this.video,
   });
   final String name;
   final String information;
   final double latitude;
   final double longitude;
-  final CachedNetworkImage thumbnailImage;
-  final List<CachedNetworkImage>? extraImages;
-
+  final String thumbnailImage;
+  final List<String>? extraImages;
+  final String? video;
   Marker toMarker() => Marker(
         markerId: MarkerId(name),
         position: LatLng(latitude, longitude),
@@ -38,6 +39,9 @@ class WaterWellData with ClusterItem {
   @override
   LatLng get location => LatLng(latitude, longitude);
 
+  @override
+  String toString() =>
+      'name: $name\nextraImages: $extraImages\n video: $video\n';
   /*Widget getCustomInfoWindowWidget() => Column(
         children: [
           Expanded(
